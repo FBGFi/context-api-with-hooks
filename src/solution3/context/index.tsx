@@ -3,9 +3,8 @@ import { useSavedValuesContext } from "./SavedValuesContext";
 import { useNameContext } from "./NameContext";
 import { useAgeContext } from "./AgeContext";
 
-interface StateProviderProps { }
 
-export const StateProvider: React.FC<React.PropsWithChildren<StateProviderProps>> = (props) => {
+export const StateProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { SavedValuesContextProvider } = useSavedValuesContext();
   const { NameContextProvider } = useNameContext();
   const { AgeContextProvider } = useAgeContext();
@@ -14,7 +13,7 @@ export const StateProvider: React.FC<React.PropsWithChildren<StateProviderProps>
     <NameContextProvider>
       <AgeContextProvider>
         <SavedValuesContextProvider>
-          {props.children}
+          {children}
         </SavedValuesContextProvider>
       </AgeContextProvider>
     </NameContextProvider>

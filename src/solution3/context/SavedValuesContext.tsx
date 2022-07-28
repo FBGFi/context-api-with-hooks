@@ -27,14 +27,14 @@ const savedValuesReducer = (state: IState, action: IAction): IState => {
   return { ...state };
 }
 
+const SavedValuesContext = React.createContext<{ savedValuesState: IState, savedValuesDispatch: React.Dispatch<IAction> }>({ savedValuesState: initialSavedValuesState, savedValuesDispatch: () => { } });
+
 export const useSavedValuesContext = () => {
   const { ageState, resetAge } = useAgeContext();
   const { nameState, resetName } = useNameContext();
 
-  const [state, dispatch] = React.useReducer(savedValuesReducer, initialSavedValuesState);
-  const SavedValuesContext = React.createContext<{ savedValuesState: IState, savedValuesDispatch: React.Dispatch<IAction> }>({ savedValuesState: initialSavedValuesState, savedValuesDispatch: () => { } });
-
   const SavedValuesContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
+    const [state, dispatch] = React.useReducer(savedValuesReducer, initialSavedValuesState);
     return (
       <SavedValuesContext.Provider value={{ savedValuesState: state, savedValuesDispatch: dispatch }}>
         {children}

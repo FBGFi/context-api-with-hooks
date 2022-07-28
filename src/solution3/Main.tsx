@@ -15,12 +15,11 @@ const NameInput: React.FC = () => {
   }
 
   React.useEffect(() => {
-    console.log(nameState);
     if (!nameState.name && inputRef.current) inputRef.current.value = "";
   }, [nameState]);
 
   return (
-    <input ref={inputRef} type="text" defaultValue={nameState.name} onChange={onChange} />
+    <input ref={inputRef} type="text" defaultValue={nameState.name} placeholder="Name" onChange={onChange} />
   );
 }
 
@@ -29,9 +28,7 @@ const AgeInput: React.FC = () => {
   const { ageState, setAge } = useAgeContext();
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const age = Number(e.target.value);
-    if (isNaN(age)) return;
-    setAge(age);
+    setAge(Number(e.target.value));
   }
 
   React.useEffect(() => {
@@ -39,7 +36,7 @@ const AgeInput: React.FC = () => {
   }, [ageState]);
 
   return (
-    <input ref={inputRef} type="number" defaultValue={ageState.age} onChange={onChange} />
+    <input ref={inputRef} type="number" defaultValue={ageState.age} placeholder="Age" onChange={onChange} />
   )
 }
 
@@ -65,7 +62,7 @@ const ValueOutput: React.FC = () => {
   );
 }
 
-export const Main = () => {
+export const Main: React.FC = () => {
   // Note that the state can only be accessed inside the provider
   return (
     <StateProvider>

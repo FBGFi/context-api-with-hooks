@@ -25,11 +25,11 @@ const nameReducer = (state: IState, action: IAction): IState => {
   return { ...state };
 }
 
-export const useNameContext = () => {
-  const [state, dispatch] = React.useReducer(nameReducer, initialNameState);
-  const NameContext = React.createContext<{ nameState: IState, nameDispatch: React.Dispatch<IAction> }>({ nameState: initialNameState, nameDispatch: () => { } });
+const NameContext = React.createContext<{ nameState: IState, nameDispatch: React.Dispatch<IAction> }>({ nameState: initialNameState, nameDispatch: () => { } });
 
+export const useNameContext = () => {
   const NameContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
+    const [state, dispatch] = React.useReducer(nameReducer, initialNameState);
     return (
       <NameContext.Provider value={{ nameState: state, nameDispatch: dispatch }}>
         {children}

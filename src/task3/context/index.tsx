@@ -3,9 +3,8 @@ import { savedValuesReducer, initialSavedValuesState, SavedValuesContext } from 
 import { nameReducer, initialNameState, NameContext } from "./NameContext";
 import { ageReducer, initialAgeState, AgeContext } from "./AgeContext";
 
-interface StateProviderProps { }
 
-export const StateProvider: React.FC<React.PropsWithChildren<StateProviderProps>> = (props) => {
+export const StateProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [savedValuesState, savedValuesDispatch] = React.useReducer(savedValuesReducer, initialSavedValuesState);
   const [nameState, nameDispatch] = React.useReducer(nameReducer, initialNameState);
   const [ageState, ageDispatch] = React.useReducer(ageReducer, initialAgeState);
@@ -13,7 +12,7 @@ export const StateProvider: React.FC<React.PropsWithChildren<StateProviderProps>
     <SavedValuesContext.Provider value={{ state: savedValuesState, dispatch: savedValuesDispatch }}>
       <NameContext.Provider value={{ state: nameState, dispatch: nameDispatch }}>
         <AgeContext.Provider value={{ state: ageState, dispatch: ageDispatch }}>
-          {props.children}
+          {children}
         </AgeContext.Provider>
       </NameContext.Provider>
     </SavedValuesContext.Provider>

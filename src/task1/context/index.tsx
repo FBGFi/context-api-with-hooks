@@ -22,15 +22,13 @@ const reducer = (state: IState, action: IAction): IState => {
   return { ...state };
 }
 
-export const Context = React.createContext<{state: IState, dispatch: React.Dispatch<IAction>}>({state: initialState, dispatch: () => {}});
+export const Context = React.createContext<{ state: IState, dispatch: React.Dispatch<IAction> }>({ state: initialState, dispatch: () => { } });
 
-interface StateProviderProps { }
-
-export const StateProvider: React.FC<React.PropsWithChildren<StateProviderProps>> = (props) => {
+export const StateProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [state, dispatch] = React.useReducer(reducer, initialState);
   return (
     <Context.Provider value={{ state, dispatch }}>
-      {props.children}
+      {children}
     </Context.Provider>
   );
 }

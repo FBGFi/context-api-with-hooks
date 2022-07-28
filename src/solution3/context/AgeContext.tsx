@@ -25,11 +25,11 @@ const ageReducer = (state: IState, action: IAction): IState => {
   return { ...state };
 }
 
-export const useAgeContext = () => {
-  const [state, dispatch] = React.useReducer(ageReducer, initialAgeState);
-  const AgeContext = React.createContext<{ ageState: IState, ageDispatch: React.Dispatch<IAction> }>({ ageState: initialAgeState, ageDispatch: () => { } });
+const AgeContext = React.createContext<{ ageState: IState, ageDispatch: React.Dispatch<IAction> }>({ ageState: initialAgeState, ageDispatch: () => { } });
 
+export const useAgeContext = () => {
   const AgeContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
+    const [state, dispatch] = React.useReducer(ageReducer, initialAgeState);
     return (
       <AgeContext.Provider value={{ ageState: state, ageDispatch: dispatch }}>
         {children}
@@ -40,6 +40,7 @@ export const useAgeContext = () => {
   const { ageState, ageDispatch } = React.useContext(AgeContext);
 
   const setAge = (age: number) => {
+    if(typeof age !== 'number') return;
     ageDispatch({
       type: "setAge",
       value: age

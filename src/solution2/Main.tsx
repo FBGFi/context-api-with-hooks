@@ -23,7 +23,7 @@ const NameInput: React.FC = () => {
   }, [state]);
 
   return (
-    <input ref={inputRef} type="text" defaultValue={state.name} onChange={onChange} />
+    <input ref={inputRef} type="text" defaultValue={state.name} placeholder="Name" onChange={onChange} />
   );
 }
 
@@ -43,7 +43,7 @@ const AgeInput: React.FC = () => {
   }, [state]);
 
   return (
-    <input ref={inputRef} type="number" defaultValue={state.age} onChange={onChange} />
+    <input ref={inputRef} type="number" defaultValue={state.age} placeholder="Age" onChange={onChange} />
   )
 }
 
@@ -69,7 +69,7 @@ const ValueOutput: React.FC = () => {
   );
 }
 
-export const Main = () => {
+export const Main: React.FC = () => {
   // Note that the state can only be accessed inside the provider
   return (
     <StateProvider>
