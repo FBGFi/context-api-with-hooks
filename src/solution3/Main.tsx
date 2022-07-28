@@ -18,6 +18,8 @@ const NameInput: React.FC = () => {
     if (!nameState.name && inputRef.current) inputRef.current.value = "";
   }, [nameState]);
 
+  console.log("this should only fire when NameState is updated");
+
   return (
     <input ref={inputRef} type="text" defaultValue={nameState.name} placeholder="Name" onChange={onChange} />
   );
@@ -34,6 +36,8 @@ const AgeInput: React.FC = () => {
   React.useEffect(() => {
     if (!ageState.age && inputRef.current) inputRef.current.value = "";
   }, [ageState]);
+
+  console.log("this should only fire when AgeState is updated");
 
   return (
     <input ref={inputRef} type="number" defaultValue={ageState.age} placeholder="Age" onChange={onChange} />
@@ -57,12 +61,16 @@ const SaveButton: React.FC = () => {
 
 const ValueOutput: React.FC = () => {
   const { savedValuesState } = useSavedValuesContext();
+
+  console.log("this fires on every update, since useSavedValuesContext subscribes to the other contexts");
+
   return (
     <h1>Saved values: {JSON.stringify(savedValuesState)}</h1>
   );
 }
 
 export const Main: React.FC = () => {
+  console.log("this should fire only when initial render happens");
   // Note that the state can only be accessed inside the provider
   return (
     <StateProvider>
