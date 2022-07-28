@@ -14,17 +14,14 @@ interface IAction {
   };
 }
 
-const initialSavedValuesState: IState = {};
+const initialSavedValuesState: IState = Object.freeze({});
 
 const savedValuesReducer = (state: IState, action: IAction): IState => {
   switch (action.type) {
     case "setSavedValue":
-      state[action.value.name] = action.value.age;
-      break;
+      return Object.freeze({ ...state, [action.value.name]: action.value.age});
   }
-  // Need to destructure here if there are nested objects in the state, or the re-render wont fire.
-  // If no nested objects, no need to destructure.
-  return { ...state };
+  return state;
 }
 
 const SavedValuesContext = React.createContext<{ savedValuesState: IState, savedValuesDispatch: React.Dispatch<IAction> }>({ savedValuesState: initialSavedValuesState, savedValuesDispatch: () => { } });

@@ -9,20 +9,16 @@ interface IAction {
   value?: string;
 }
 
-const initialNameState: IState = {};
+const initialNameState: IState = Object.freeze({});
 
 const nameReducer = (state: IState, action: IAction): IState => {
   switch (action.type) {
     case "setName":
-      state.name = action.value;
-      break;
+      return Object.freeze({...state, name: action.value});
     case "resetName":
-      state.name = undefined;
-      break;
+      return Object.freeze({...state, name: undefined});
   }
-  // Need to destructure here if there are nested objects in the state, or the re-render wont fire.
-  // If no nested objects, no need to destructure.
-  return { ...state };
+  return state;
 }
 
 const NameContext = React.createContext<{ nameState: IState, nameDispatch: React.Dispatch<IAction> }>({ nameState: initialNameState, nameDispatch: () => { } });

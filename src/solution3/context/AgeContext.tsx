@@ -9,20 +9,16 @@ interface IAction {
   value?: number;
 }
 
-const initialAgeState: IState = {};
+const initialAgeState: IState = Object.freeze({});
 
 const ageReducer = (state: IState, action: IAction): IState => {
   switch (action.type) {
     case "setAge":
-      state.age = action.value;
-      break;
+      return Object.freeze({ ...state, age: action.value });
     case "resetAge":
-      state.age = undefined;
-      break;
+      return Object.freeze({ ...state, age: undefined });
   }
-  // Need to destructure here if there are nested objects in the state, or the re-render wont fire.
-  // If no nested objects, no need to destructure.
-  return { ...state };
+  return state;
 }
 
 const AgeContext = React.createContext<{ ageState: IState, ageDispatch: React.Dispatch<IAction> }>({ ageState: initialAgeState, ageDispatch: () => { } });
@@ -40,7 +36,7 @@ export const useAgeContext = () => {
   const { ageState, ageDispatch } = React.useContext(AgeContext);
 
   const setAge = (age: number) => {
-    if(typeof age !== 'number') return;
+    if (typeof age !== 'number') return;
     ageDispatch({
       type: "setAge",
       value: age
