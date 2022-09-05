@@ -6,26 +6,13 @@ interface IState {
   [name: string]: number;
 }
 
-interface IAction {
-  type: string;
-  value: {
-    name: string;
-    age: number;
-  };
-}
+type TCallBack = (state: IState) => IState;
 
-const initialSavedValuesState: IState = {};
+const initialSavedValuesState: IState = Object.freeze({});
 
-const savedValuesReducer = (state: IState, action: IAction): IState => {
-  switch (action.type) {
-    case "setSavedValue":
-      state[action.value.name] = action.value.age;
-      break;
-  }
-  return { ...state };
-}
+const savedValuesReducer = (state: IState, callback: TCallBack): IState => Object.freeze(callback(state));
 
-const SavedValuesContext = React.createContext<{ savedValuesState: IState, savedValuesDispatch: React.Dispatch<IAction> }>({ savedValuesState: initialSavedValuesState, savedValuesDispatch: () => { } });
+const SavedValuesContext = React.createContext<{ savedValuesState: IState, savedValuesDispatch: React.Dispatch<TCallBack> }>({ savedValuesState: initialSavedValuesState, savedValuesDispatch: () => { } });
 
 export const useSavedValuesContext = () => {
   const { ageState, resetAge } = useAgeContext();
@@ -44,10 +31,10 @@ export const useSavedValuesContext = () => {
 
   const setSavedValue = () => {
     if (!nameState.name || !ageState.age) return;
-    savedValuesDispatch({
-      type: "setSavedValue",
-      value: { name: nameState.name, age: ageState.age }
-    });
+    // Due to race conditions, need to assign these to variables or they will be reset before callback can use them
+    const name = nameState.name;
+    const age = ageState.age;
+    savedValuesDispatch((state) => ({ ...state, [name]: age }));
     resetAge();
     resetName();
   }

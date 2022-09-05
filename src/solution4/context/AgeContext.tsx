@@ -4,26 +4,13 @@ interface IState {
   age?: number;
 }
 
-interface IAction {
-  type: string;
-  value?: number;
-}
+type TCallBack = (state: IState) => IState;
 
-const initialAgeState: IState = {};
+const initialAgeState: IState = Object.freeze({});
 
-const ageReducer = (state: IState, action: IAction): IState => {
-  switch (action.type) {
-    case "setAge":
-      state.age = action.value;
-      break;
-    case "resetAge":
-      state.age = undefined;
-      break;
-  }
-  return { ...state };
-}
+const ageReducer = (state: IState, callback: TCallBack) => Object.freeze(callback(state));
 
-const AgeContext = React.createContext<{ ageState: IState, ageDispatch: React.Dispatch<IAction> }>({ ageState: initialAgeState, ageDispatch: () => { } });
+const AgeContext = React.createContext<{ ageState: IState, ageDispatch: React.Dispatch<TCallBack> }>({ ageState: initialAgeState, ageDispatch: () => { } });
 
 export const useAgeContext = () => {
   const AgeContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
@@ -39,14 +26,11 @@ export const useAgeContext = () => {
 
   const setAge = (age: number) => {
     if (typeof age !== 'number') return;
-    ageDispatch({
-      type: "setAge",
-      value: age
-    });
+    ageDispatch((state) => ({ ...state, age }));
   }
 
   const resetAge = () => {
-    ageDispatch({ type: "resetAge" });
+    ageDispatch((state) => ({ ...state, age: undefined }));
   }
 
   return { ageState, AgeContextProvider, setAge, resetAge };

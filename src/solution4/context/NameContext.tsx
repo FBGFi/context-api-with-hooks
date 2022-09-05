@@ -4,26 +4,13 @@ interface IState {
   name?: string;
 }
 
-interface IAction {
-  type: string;
-  value?: string;
-}
+type TCallBack = (state: IState) => IState;
 
-const initialNameState: IState = {};
+const initialNameState: IState = Object.freeze({});
 
-const nameReducer = (state: IState, action: IAction): IState => {
-  switch (action.type) {
-    case "setName":
-      state.name = action.value;
-      break;
-    case "resetName":
-      state.name = undefined;
-      break;
-  }
-  return { ...state };
-}
+const nameReducer = (state: IState, callback: TCallBack): IState => Object.freeze(callback(state));
 
-const NameContext = React.createContext<{ nameState: IState, nameDispatch: React.Dispatch<IAction> }>({ nameState: initialNameState, nameDispatch: () => { } });
+const NameContext = React.createContext<{ nameState: IState, nameDispatch: React.Dispatch<TCallBack> }>({ nameState: initialNameState, nameDispatch: () => { } });
 
 export const useNameContext = () => {
   const NameContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
@@ -38,14 +25,13 @@ export const useNameContext = () => {
   const { nameState, nameDispatch } = React.useContext(NameContext);
 
   const setName = (name: string) => {
-    nameDispatch({
-      type: "setName",
-      value: name
-    });
+    // Unnecessary to pass state here in this case, but for the sake of unison with other contexts
+    // added it here.
+    nameDispatch((state) => ({ ...state, name }));
   }
 
   const resetName = () => {
-    nameDispatch({ type: "resetName" });
+    nameDispatch((state) => ({ ...state, name: undefined }));
   }
 
 
